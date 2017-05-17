@@ -1,7 +1,10 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom'
+import React        from 'react';
+import { Redirect } from 'react-router'
 
-import Helper from '../../lib/Helper'
+import Helper       from '../../lib/Helper'
+
+if(!window.logins)
+    window.logins = 0;
 
 const defaults = {
     user: null,
@@ -12,8 +15,6 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log('login props', props);
-
         this.state = {
             username: 'tspiouneas',
             password: 'tspiouneas',
@@ -21,9 +22,25 @@ class Login extends React.Component {
         };
 
         Helper.bind(this, ['onChange', 'handleSubmit', 'getPreviousLocation']);
+
+        //TODO: remove these
+        this.id = Math.floor(Math.random() * 10000);
+        //console.log('Login', this.id, 'constructed, already existing', window.logins);
+
+        window.logins++;
+    }
+
+    componentDidMount() {
+        //console.log('Login', this.id, 'mounted', this.props);
+    }
+
+    componentWillUnmount() {
+        //console.log('Login', this.id, 'unmounting');
+        window.logins--;
     }
 
     componentWillReceiveProps(nextProps, nextState) {
+        //console.log('Login', this.id, 'receiving props', JSON.parse(JSON.stringify(this.props)), JSON.parse(JSON.stringify(nextProps)));
         if(!Helper.isNullOrWhitespace(nextProps.message)) {
             this.setState({
                 message: nextProps.message
@@ -51,6 +68,7 @@ class Login extends React.Component {
     }
 
     render() {
+        //console.log('Login', this.id, 'rendering');
         if(this.props.user != null)
             return <Redirect to={ this.getPreviousLocation() } />
 

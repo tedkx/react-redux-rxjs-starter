@@ -1,14 +1,12 @@
 import React from 'react';
 
-import Routing  from './routing/Routing'
 import Header   from './layout/Header'
-import Sidebar  from './layout/Sidebar'
-import Main     from './layout/Main'
+import Sidebar  from '../containers/SidebarContainer'
+import Main     from '../containers/MainContainer'
 import Footer   from './layout/Footer'
 
 class App extends React.Component {
     render() {
-        console.log('rendering app', this.props);
         return (
             <div id="app">
                 <div className="loader app-loader loader-hidden"></div>
@@ -16,7 +14,7 @@ class App extends React.Component {
                     <Header />
                     <Sidebar />
                     <Main>
-                        <Routing />
+                        { this.props.children }
                     </Main>
                     <Footer />
                 </div>

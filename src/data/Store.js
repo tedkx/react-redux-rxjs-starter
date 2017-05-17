@@ -1,5 +1,8 @@
 import { combineReducers, createStore, 
     applyMiddleware }       from 'redux'
+import { browserHistory }   from 'react-router'
+import { syncHistoryWithStore, 
+    routerReducer }         from 'react-router-redux'
 
 /* Reducers */
 import AppReducer, { defaultState as AppDefaults } 
@@ -9,9 +12,8 @@ import DashboardReducer, { defaultState as DashboardDefaults }
 
 const rootReducer = combineReducers({
     app: AppReducer,
-    dashboard: DashboardReducer
-    //TODO: add routerReducer
-    //routing: routerReducer
+    dashboard: DashboardReducer,
+    routing: routerReducer
 });
 
 const defaultState = {
@@ -22,11 +24,11 @@ const defaultState = {
 /* Observable Epix */
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 
-import * as AppEpics    from './App.epics'
-export const rootEpic = combineEpics(
+import * as AppEpics    from './app/App.epics'
+const rootEpic = combineEpics(
     ...AppEpics
 );
-epicMiddleware = createEpicMiddleware(rootEpic);
+const epicMiddleware = createEpicMiddleware(rootEpic);
 
 /* Middleware */
 const middleware = applyMiddleware(epicMiddleware);
@@ -36,10 +38,6 @@ const Store = typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function'
     : createStore(rootReducer, defaultState, middleware);
 
 /* Router History */
-import createBrowserHistory from 'history/createBrowserHistory'
-//TODO: connect history with redux store
-//import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
-//export const history = syncHistoryWithStore(browserHistory, Store)
-export const history = createBrowserHistory();
+export const history = syncHistoryWithStore(browserHistory, Store);
 
 export default Store;

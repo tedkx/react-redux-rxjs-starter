@@ -1,16 +1,16 @@
 import React                from 'react'
 import ReactDOM             from 'react-dom'
 import { Provider }         from 'react-redux'
-import { BrowserRouter }    from 'react-router-dom'
+import { Router }           from 'react-router'
 
 import Store, { history }   from './data/Store'
-import App                  from './components/App'
+import Routing              from './components/routing/Routing'
 
 ReactDOM.render(
     <Provider store={ Store }>
-        <BrowserRouter history={ history }>
-            <App />
-        </BrowserRouter>
+        <Router history={ history }>
+            { Routing }
+        </Router>
     </Provider>,
     document.getElementById('app-wrap')
 );
