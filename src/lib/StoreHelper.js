@@ -6,10 +6,9 @@ const StoreHelper = {
         if(!Helper.isNil(payload))
             action.payload = payload;
         if(!Helper.isNil(error))
-            action.payload = error;
+            action.error = error;
         return action;
-    },
-    errorFromSaga: (type, e) => ({ type, payload: e.response, error: e })
+    }
 }
 
 export default StoreHelper;

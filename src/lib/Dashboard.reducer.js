@@ -1,19 +1,19 @@
 import { DASHBOARD_ACTION_TYPES as AT } from './Dashboard.actions'
 
 export const defaultState = {
-    fetchingData: false,
-    data: null
+    data: null,
+    dataFetching: false,
+    error: null
 }
 
 const dashboard = (state = defaultState, action) => {
     switch (action.type) {
         case AT.DATA_FETCH:
-            return Object.assign({}, state, { fetchingData: true });
+            return Object.assign({}, state, { dataFetching: true });
         case AT.DATA_FETCH_SUCCESS:
-            delete action.payload.password;
-            return Object.assign({}, state, { fetchingData: false, data: action.payload });
+            return Object.assign({}, state, { dataFetching: false, data: action.payload });
         case AT.DATA_FETCH_FAIL:
-            return Object.assign({}, state, { fetchingData: false });
+            return Object.assign({}, state, { dataFetching: false, error: action.error });
         default:
             return state;
     }

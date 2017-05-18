@@ -8,7 +8,7 @@ import Footer   from './layout/Footer'
 class App extends React.Component {
     render() {
         return (
-            <div id="app">
+            <div id="app" className={ this.props.user != null ? 'authenticated' : '' }>
                 <div className="loader app-loader loader-hidden"></div>
                 <div>
                     <Header />

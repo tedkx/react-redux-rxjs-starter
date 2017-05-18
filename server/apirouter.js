@@ -1,5 +1,6 @@
 const express = require('express'),
     apirouter =    express.Router(),
+    dm        = require('./datamodel'),
     auth =      require('./auth'),
     DELAY = 700;
 
@@ -23,7 +24,7 @@ apirouter.use(function (req, res, next) {
 });
 
 /* login */
-apirouter.post('/login', function(req, res) {
+apirouter.post('/login', json, delay, function(req, res) {
     let user = req.body && req.body.username && req.body.password
         ? dm.findUser(req.body.username, req.body.password)
         : null

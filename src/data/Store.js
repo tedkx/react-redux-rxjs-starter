@@ -24,11 +24,11 @@ const defaultState = {
 /* Observable Epix */
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 
-import * as AppEpics    from './app/App.epics'
-const rootEpic = combineEpics(
-    ...AppEpics
-);
-const epicMiddleware = createEpicMiddleware(rootEpic);
+import AppEpics         from './app/App.epics'
+import DashboardEpics   from './dashboard/Dashboard.epics'
+const epicMiddleware = createEpicMiddleware(combineEpics(
+    AppEpics, DashboardEpics
+));
 
 /* Middleware */
 const middleware = applyMiddleware(epicMiddleware);

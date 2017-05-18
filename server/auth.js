@@ -1,3 +1,5 @@
+const dm = require('./datamodel')
+
 /* The swiss cheese of authentication */
 const parseCredentials = (req) => {
     let auth = req.get('authorization');
@@ -32,8 +34,8 @@ module.exports = {
         if(!req.user)
             return res.status(401).end();
         
-        if(req.authRoles)
-            console.log('authorizing for roles', req.authRoles, 'current role', req.user.role);
+        if(Array.isArray(req.authRoles) && req.authRoles.indexOf(req.user.role) < 0)
+            return res.status(401).end();
 
         next();
     },

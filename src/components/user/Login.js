@@ -1,10 +1,8 @@
 import React        from 'react';
-import { Redirect } from 'react-router'
 
+import LoaderOverlay from '../common/LoaderOverlay'
+import { history }  from '../../data/Store'
 import Helper       from '../../lib/Helper'
-
-if(!window.logins)
-    window.logins = 0;
 
 const defaults = {
     user: null,
@@ -16,40 +14,23 @@ class Login extends React.Component {
         super(props);
 
         this.state = {
-            username: 'tspiouneas',
-            password: 'tspiouneas',
-            message: ''
+            username: '',
+            password: '',
+            error: ''
         };
-
-        Helper.bind(this, ['onChange', 'handleSubmit', 'getPreviousLocation']);
-
-        //TODO: remove these
-        this.id = Math.floor(Math.random() * 10000);
-        //console.log('Login', this.id, 'constructed, already existing', window.logins);
-
-        window.logins++;
-    }
-
-    componentDidMount() {
-        //console.log('Login', this.id, 'mounted', this.props);
-    }
-
-    componentWillUnmount() {
-        //console.log('Login', this.id, 'unmounting');
-        window.logins--;
+        
+        Helper.bind(this, ['onChange', 'handleSubmit']);
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-        //console.log('Login', this.id, 'receiving props', JSON.parse(JSON.stringify(this.props)), JSON.parse(JSON.stringify(nextProps)));
-        if(!Helper.isNullOrWhitespace(nextProps.message)) {
-            this.setState({
-                message: nextProps.message
-            });
+        if(nextProps.user != null) {
+            let from = (this.props.location.state || {}).from,
+                redirectLocation = from ? { pathname: from.pathname, query: from.query } : { pathname: '/' };
+            return history.replace(redirectLocation);
         }
-    }
-
-    getPreviousLocation() {
-        return this.props.location.from || { pathname: '/' }
+        
+        if(this.props.error != nextProps.error)
+            this.setState({ error: nextProps.error });
     }
 
     onChange(input, e) {
@@ -68,12 +49,12 @@ class Login extends React.Component {
     }
 
     render() {
-        //console.log('Login', this.id, 'rendering');
         if(this.props.user != null)
-            return <Redirect to={ this.getPreviousLocation() } />
+            return false;
 
         return (
-            <div className="login-wrap">
+            <div className="login-wrap loader-host">
+                <LoaderOverlay loading={ this.props.authenticating } />
                 <div className="m-t-30 card-box">
                     <div className="text-center">
                         <h4 className="text-uppercase font-bold m-b-0">Εισοδος</h4>
@@ -100,11 +81,10 @@ class Login extends React.Component {
                                         />
                                 </div>
                             </div>
-
                             {
-                                Helper.isNullOrWhitespace(this.state.message)
+                                Helper.isNullOrWhitespace(this.state.error)
                                     ? false
-                                    : <div className="alert alert-danger">{ this.state.message }</div>
+                                    : <div className="alert alert-danger">{ this.state.error }</div>
                             }
 
                             <div className="form-group text-center m-t-30">
